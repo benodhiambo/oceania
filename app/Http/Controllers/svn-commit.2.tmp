@@ -1,0 +1,7 @@
+Bug fixes
+--This line, and those below, will be ignored--
+
+M    ReceivingNoteController.php
+M    CentralStockMgmtController.php
+M    OpenitemController.php
+M    LocalPriceController.php

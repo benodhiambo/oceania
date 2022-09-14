@@ -1,0 +1,961 @@
+ser@server:~/oceania/trunk/oceania$ php artisan invfcc:gateway
+"Starting Invenco FCC Integration Gateway ...."
+"Listening at oceania_darulhana:6001"
+b"BEFORE input=\x00\x00\x00Á{"Header":{"Api":"infx:fcc:0.5","MessageType":"FCCGetConfigRequest","MessageID":2,"ApplicationSender":"FUELPOS","WorkstationID":"1","TXTimestamp":"2022-04-30T09:11:18.311402600Z"},"Payload":{}}"
+"AFTER input={"Header":{"Api":"infx:fcc:0.5","MessageType":"FCCGetConfigRequest","MessageID":2,"ApplicationSender":"FUELPOS","WorkstationID":"1","TXTimestamp":"2022-04-30T09:11:18.311402600Z"},"Payload":{}}"
+string(218) "handle: Received input = {"Header":{"Api":"infx:fcc:0.5","MessageType":"FCCGetConfigRequest","MessageID":2,"ApplicationSender":"FUELPOS","WorkstationID":"1","TXTimestamp":"2022-04-30T09:11:18.311402600Z"},"Payload":{}}"
+{#1238
+  +"Header": {#1239
+    +"Api": "infx:fcc:0.5"
+    +"MessageType": "FCCGetConfigRequest"
+    +"MessageID": 2
+    +"ApplicationSender": "FUELPOS"
+    +"WorkstationID": "1"
+    +"TXTimestamp": "2022-04-30T09:11:18.311402600Z"
+  }
+  +"Payload": {#1241}
+}
+"MessageType=FCCGetConfigRequest"
+"Received FCCGetConfigRequest..."
+"get_config_response()"
+ 
+string(1233) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCGetConfigResponse","ResponseID":2,"ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":5,"TXTimeStamp":"2022-04-3017:11:19"},"Payload":{"Result":{"OverallResult":"Success","ErrorCode":"ERRCD_OK","ErrorText":""},"FuelPointConfigList":[{"DeviceID":3,"Nozzles":[{"NozzleID":1,"CurrentFuelMode":1,"FuelModeConfigList":[{"FuelModeID":0,"Price":"1.250","MaxVolume":"50.000","MaxAmount":"200.000"},{"FuelModeID":1,"Price":"1.350","MaxVolume":"50.000","MaxAmount":"200.000"}],"Product":{"ProductID":101,"Name":"Super91","BlendRatio":0,"ProductID1":0,"ProductID2":0}},{"NozzleID":2,"CurrentFuelMode":1,"FuelModeConfigList":[{"FuelModeID":0,"Price":"1.450","MaxVolume":"50.000","MaxAmount":"200.000"},{"FuelModeID":1,"Price":"1.550","MaxVolume":"50.000","MaxAmount":"200.000"}],"Product":{"ProductID":102,"Name":"Super95","BlendRatio":0,"ProductID1":0,"ProductID2":0}},{"NozzleID":3,"CurrentFuelMode":1,"FuelModeConfigList":[{"FuelModeID":0,"Price":"1.850","MaxVolume":"50.000","MaxAmount":"200.000"},{"FuelModeID":1,"Price":"1.950","MaxVolume":"50.000","MaxAmount":"200.000"}],"Product":{"ProductID":103,"Name":"Super98","BlendRatio":0,"ProductID1":0,"ProductID2":0}}]}]}}"
+1233
+b"\x00\x00\x04Ñ"
+"return from sendEPS: ret=1237"
+b"BEFORE input=\x00\x00\x00Ï{"Header":{"Api":"infx:fcc:0.5","MessageType":"FCCGetFuelModeRequest","MessageID":3,"ApplicationSender":"FUELPOS","WorkstationID":"1","TXTimestamp":"2022-04-30T09:11:18.398403300Z"},"Payload":{"DeviceID":3}}"
+"AFTER input={"Header":{"Api":"infx:fcc:0.5","MessageType":"FCCGetFuelModeRequest","MessageID":3,"ApplicationSender":"FUELPOS","WorkstationID":"1","TXTimestamp":"2022-04-30T09:11:18.398403300Z"},"Payload":{"DeviceID":3}}"
+string(232) "handle: Received input = {"Header":{"Api":"infx:fcc:0.5","MessageType":"FCCGetFuelModeRequest","MessageID":3,"ApplicationSender":"FUELPOS","WorkstationID":"1","TXTimestamp":"2022-04-30T09:11:18.398403300Z"},"Payload":{"DeviceID":3}}"
+{#1278
+  +"Header": {#1279
+    +"Api": "infx:fcc:0.5"
+    +"MessageType": "FCCGetFuelModeRequest"
+    +"MessageID": 3
+    +"ApplicationSender": "FUELPOS"
+    +"WorkstationID": "1"
+    +"TXTimestamp": "2022-04-30T09:11:18.398403300Z"
+  }
+  +"Payload": {#1281
+    +"DeviceID": 3
+  }
+}
+"MessageType=FCCGetFuelModeRequest"
+"Received FCCGetFuelModeRequest..."
+"get_fuelmode_response()"
+string(356) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCGetFuelModeResponse","ResponseID":3,"ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":6,"TXTimeStamp":"2022-04-3017:11:19"},"Payload":{"DeviceID":3,"FuelMode":{"FuelModeId":1,"Name":"Credit"},"Result":{"ErrorText":"","OverallResult":"Success","ErrorCode":"ERRCD_OK","ErrorText":""}}}"
+356
+"\x00\x00\x01d"
+"return from sendEPS: ret=360"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+b"BEFORE input=\x00\x00\x00Ô{"Header":{"Api":"infx:fcc:0.5","MessageType":"FCCReserveFuelPointRequest","MessageID":4,"ApplicationSender":"FUELPOS","WorkstationID":"1","TXTimestamp":"2022-04-30T09:11:34.257411600Z"},"Payload":{"DeviceID":3}}"
+"AFTER input={"Header":{"Api":"infx:fcc:0.5","MessageType":"FCCReserveFuelPointRequest","MessageID":4,"ApplicationSender":"FUELPOS","WorkstationID":"1","TXTimestamp":"2022-04-30T09:11:34.257411600Z"},"Payload":{"DeviceID":3}}"
+string(237) "handle: Received input = {"Header":{"Api":"infx:fcc:0.5","MessageType":"FCCReserveFuelPointRequest","MessageID":4,"ApplicationSender":"FUELPOS","WorkstationID":"1","TXTimestamp":"2022-04-30T09:11:34.257411600Z"},"Payload":{"DeviceID":3}}"
+{#1309
+  +"Header": {#1310
+    +"Api": "infx:fcc:0.5"
+    +"MessageType": "FCCReserveFuelPointRequest"
+    +"MessageID": 4
+    +"ApplicationSender": "FUELPOS"
+    +"WorkstationID": "1"
+    +"TXTimestamp": "2022-04-30T09:11:34.257411600Z"
+  }
+  +"Payload": {#1312
+    +"DeviceID": 3
+  }
+}
+"MessageType=FCCReserveFuelPointRequest"
+"Received FCCReserveFuelPointRequest..."
+"reserve_fuelpoint_response()"
+ 
+string(254) "{"Header":{"Api":"infx:FCC:0.9","MessageType":"FCCReserveFuelPointResponse","MessageID":8,"ResponseID":4,"TXTimestamp":"2022-04-3017:11:35"},"Payload":{"Result":{"OverallResult":"Success","ErrorCode":"1","ErrorText":"OK"},"DeviceID":3,"ReservationID":1}}"
+254
+b"\x00\x00\x00þ"
+"return from sendEPS: ret=258"
+"BEFORE input=\x00\x00\x01`{"Header":{"Api":"infx:fcc:0.5","MessageType":"FCCAuthorizeFuelPointRequest","MessageID":5,"ApplicationSender":"FUELPOS","WorkstationID":"1","TXTimestamp":"2022-04-30T09:11:36.176411900Z"},"Payload":{"DeviceID":3,"AuthorizationType":"Prepay","ReleasedProducts":[101,102,103],"MaxTrxAmount":"200.00","AutoLock":false,"ReservationID":1,"PaymentData":""}}"
+"AFTER input={"Header":{"Api":"infx:fcc:0.5","MessageType":"FCCAuthorizeFuelPointRequest","MessageID":5,"ApplicationSender":"FUELPOS","WorkstationID":"1","TXTimestamp":"2022-04-30T09:11:36.176411900Z"},"Payload":{"DeviceID":3,"AuthorizationType":"Prepay","ReleasedProducts":[101,102,103],"MaxTrxAmount":"200.00","AutoLock":false,"ReservationID":1,"PaymentData":""}}"
+string(377) "handle: Received input = {"Header":{"Api":"infx:fcc:0.5","MessageType":"FCCAuthorizeFuelPointRequest","MessageID":5,"ApplicationSender":"FUELPOS","WorkstationID":"1","TXTimestamp":"2022-04-30T09:11:36.176411900Z"},"Payload":{"DeviceID":3,"AuthorizationType":"Prepay","ReleasedProducts":[101,102,103],"MaxTrxAmount":"200.00","AutoLock":false,"ReservationID":1,"PaymentData":""}}"
+{#1354
+  +"Header": {#1361
+    +"Api": "infx:fcc:0.5"
+    +"MessageType": "FCCAuthorizeFuelPointRequest"
+    +"MessageID": 5
+    +"ApplicationSender": "FUELPOS"
+    +"WorkstationID": "1"
+    +"TXTimestamp": "2022-04-30T09:11:36.176411900Z"
+  }
+  +"Payload": {#1364
+    +"DeviceID": 3
+    +"AuthorizationType": "Prepay"
+    +"ReleasedProducts": array:3 [
+      0 => 101
+      1 => 102
+      2 => 103
+    ]
+    +"MaxTrxAmount": "200.00"
+    +"AutoLock": false
+    +"ReservationID": 1
+    +"PaymentData": ""
+  }
+}
+"MessageType=FCCAuthorizeFuelPointRequest"
+"Received FCCAuthorizeFuelPointRequest..."
+"authorize_fuelpoint_response()"
+"**** CLASS: authorize_fuelpoint_response() *****;"
+"pump_no=3"
+"amount=200.00"
+"pump_reserved=[{"id":1,"pump_no":3,"deleted_at":null,"created_at":"2022-04-30 17:11:35","updated_at":"2022-04-30 17:11:35"}]"
+"url=http://192.168.1.117/jsonPTS"
+"pump_authorize={"Protocol":"jsonPTS","Packets":[{"Id":1,"Type":"PumpAuthorize","Data":{"Pump":3,"Type":"Amount","Dose":"200.00","AutoCloseTransaction":true}}]}"
+"pts_response={"Protocol":"jsonPTS","Packets":[{"Id":1,"Type":"PumpAuthorizeConfirmation","Data":{"Pump":3,"Transaction":666}}]}"
+"***** save_pts_transaction_details() *****"
+array:3 [
+  "pump_no" => 3
+  "trans" => 666
+  "mtype" => "PumpAuthorizeConfirmation"
+]
+"***** authorize_fuelpoint_raw() *****"
+{#1354
+  +"Header": {#1361
+    +"Api": "infx:fcc:0.5"
+    +"MessageType": "FCCAuthorizeFuelPointRequest"
+    +"MessageID": 5
+    +"ApplicationSender": "FUELPOS"
+    +"WorkstationID": "1"
+    +"TXTimestamp": "2022-04-30T09:11:36.176411900Z"
+  }
+  +"Payload": {#1364
+    +"DeviceID": 3
+    +"AuthorizationType": "Prepay"
+    +"ReleasedProducts": array:3 [
+      0 => 101
+      1 => 102
+      2 => 103
+    ]
+    +"MaxTrxAmount": "200.00"
+    +"AutoLock": false
+    +"ReservationID": 1
+    +"PaymentData": ""
+  }
+}
+string(326) "{"Header":{"WorkstationID":"OPOSSUM_POS1","TXTimestamp":"2022-04-3017:11:37","ResponseID":5,"Api":"infx:fcc:0.9","ApplicationSender":"InfxFCC","MessageType":"FCCAuthorizeFuelPointResponse","MessageID":22},"Payload":{"DeviceID":1,"TransactionSeqNo":107,"Result":{"ErrorText":"","OverallResult":"Success","ErrorCode":ERRCD_OK}}}"
+string(363) "authorize_fuelpoint_raw: returns out={"Header":{"WorkstationID":"OPOSSUM_POS1","TXTimestamp":"2022-04-3017:11:37","ResponseID":5,"Api":"infx:fcc:0.9","ApplicationSender":"InfxFCC","MessageType":"FCCAuthorizeFuelPointResponse","MessageID":22},"Payload":{"DeviceID":1,"TransactionSeqNo":107,"Result":{"ErrorText":"","OverallResult":"Success","ErrorCode":ERRCD_OK}}}"
+string(326) "{"Header":{"WorkstationID":"OPOSSUM_POS1","TXTimestamp":"2022-04-3017:11:37","ResponseID":5,"Api":"infx:fcc:0.9","ApplicationSender":"InfxFCC","MessageType":"FCCAuthorizeFuelPointResponse","MessageID":22},"Payload":{"DeviceID":1,"TransactionSeqNo":107,"Result":{"ErrorText":"","OverallResult":"Success","ErrorCode":ERRCD_OK}}}"
+326
+"\x00\x00\x01F"
+"authorize_fuelpoint_raw: returns from sendEPS: ret0=330"
+string(479) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCFuelPointStateChangeEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":12,"TXTimestamp":"2022-04-3017:11:37"},"Payload":{"FuelPointState":{"DeviceID":3,"FuelModeID":1,"DeviceState":"Authorized","ProductSelected":"Valid","NozzleState":"NozzleDown","SuspendedState":"None","Reserved":true,"OperatorConsentState":"NotRequired","TransactionSeqNo":666,"ProductID":0,"NozzlesUpList":[],"ReservationID":0}}}"
+479
+b"\x00\x00\x01ß"
+"fuelpoint_state_change_event: returns from sendEPS: ret1=483"
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpIdleStatus"
+  "Data" => array:9 [
+    "Pump" => 3
+    "NozzleUp" => 0
+    "Request" => ""
+    "LastNozzle" => 1
+    "LastVolume" => 18.14
+    "LastPrice" => 5.55
+    "LastAmount" => 100.68
+    "LastTransaction" => 665
+    "User" => "admin"
+  ]
+]
+string(255) "recvEPS: Received input = {"Header":{"Api":"infx:fcc:0.5","MessageType":"FCCGetDeliveryDetailsRequest","MessageID":6,"ApplicationSender":"FUELPOS","WorkstationID":"1","TXTimestamp":"2022-04-30T09:11:36.391411400Z"},"Payload":{"DeviceID":3,"DeliveryID":0}}"
+{#1455
+  +"Header": {#1456
+    +"Api": "infx:fcc:0.5"
+    +"MessageType": "FCCGetDeliveryDetailsRequest"
+    +"MessageID": 6
+    +"ApplicationSender": "FUELPOS"
+    +"WorkstationID": "1"
+    +"TXTimestamp": "2022-04-30T09:11:36.391411400Z"
+  }
+  +"Payload": {#1458
+    +"DeviceID": 3
+    +"DeliveryID": 0
+  }
+}
+"MessageType=FCCGetDeliveryDetailsRequest"
+"Received FCCGetDeliveryDetailsRequest..."
+"trans_no=0"
+"ogfuel_id=0"
+"price=0"
+"volume=0"
+"amount=0"
+"get_deliverydetails_response()"
+string(546) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCGetDeliveryDetailsResponse","ResponseID":19,"ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":6,"TXTimestamp":"2022-04-3017:11:37"},"Payload":{"DeviceID":1,"DeliveryStateList":[{"DeviceID":3,"DeliveryState":"Fueling","TransactionSeqNo":0,"ProductID":0,"AuthorizationType":"Preauth","Locked":true,"PaymentData":"","ConsentState":"NotRequired","Totals":{"UnitPrice":"0","Volume":"0","Amount":"0"}}],"Result":{"OverallResult":"Success","ErrorCode":"ERRCD_OK","ErrorText":""}}}"
+546
+"\x00\x00\x02""
+"return from sendEPS: ret=550"
+"execute_delivery_loop: epsret="
+1
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpIdleStatus"
+  "Data" => array:9 [
+    "Pump" => 3
+    "NozzleUp" => 0
+    "Request" => ""
+    "LastNozzle" => 1
+    "LastVolume" => 18.14
+    "LastPrice" => 5.55
+    "LastAmount" => 100.68
+    "LastTransaction" => 665
+    "User" => "admin"
+  ]
+]
+
+
+string(235) "recvEPS: Received input = {"Header":{"Api":"infx:fcc:0.5","MessageType":"FCCFreeFuelPointRequest","MessageID":7,"ApplicationSender":"FUELPOS","WorkstationID":"1","TXTimestamp":"2022-04-30T09:12:06.189428200Z"},"Payload":{"DeviceID":3}}"
+{#1508
+  +"Header": {#1509
+    +"Api": "infx:fcc:0.5"
+    +"MessageType": "FCCFreeFuelPointRequest"
+    +"MessageID": 7
+    +"ApplicationSender": "FUELPOS"
+    +"WorkstationID": "1"
+    +"TXTimestamp": "2022-04-30T09:12:06.189428200Z"
+  }
+  +"Payload": {#1511
+    +"DeviceID": 3
+  }
+}
+"MessageType=FCCFreeFuelPointRequest"
+"recvEPS wa tak tau: mtype=FCCFreeFuelPointRequest"
+string(8) "wataktau"
+8
+"\x00\x00\x00\x08"
+"return from sendEPS: ret=12"
+"execute_delivery_loop: epsret="
+1
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpFillingStatus"
+  "Data" => array:7 [
+    "Pump" => 3
+    "Nozzle" => 1
+    "Volume" => 8.46
+    "Price" => 5.55
+    "Amount" => 46.95
+    "Transaction" => 666
+    "User" => "admin"
+  ]
+]
+"trans =666"
+"nozzle=1"
+"price =5.55"
+"volume=8.46"
+"amount=46.95"
+"delivery_progress_event()"
+string(364) "{"Header":{"Api":"infx:FCC:0.9","MessageType":"FCCDeliveryProgressEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":3,"ResponseID":0,"TXTimestamp":"2022-04-3017:12:08"},"Payload":{"DeviceID":3,"TransactionSeqNo":666,"DeliveryState":{"DeviceID":3,"TransactionSeqNo":666,"Totals":{"UnitPrice":"5.55","Volume":"8.46","Amount":"46.95"}}}}"
+364
+"\x00\x00\x01l"
+"recvEPS: return from sendEPS: ret=368"
+"execute_delivery_loop: epsret="
+1
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpFillingStatus"
+  "Data" => array:7 [
+    "Pump" => 3
+    "Nozzle" => 1
+    "Volume" => 9.34
+    "Price" => 5.55
+    "Amount" => 51.84
+    "Transaction" => 666
+    "User" => "admin"
+  ]
+]
+"trans =666"
+"nozzle=1"
+"price =5.55"
+"volume=9.34"
+"amount=51.84"
+"delivery_progress_event()"
+string(364) "{"Header":{"Api":"infx:FCC:0.9","MessageType":"FCCDeliveryProgressEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":3,"ResponseID":0,"TXTimestamp":"2022-04-3017:12:09"},"Payload":{"DeviceID":3,"TransactionSeqNo":666,"DeliveryState":{"DeviceID":3,"TransactionSeqNo":666,"Totals":{"UnitPrice":"5.55","Volume":"9.34","Amount":"51.84"}}}}"
+364
+"\x00\x00\x01l"
+"recvEPS: return from sendEPS: ret=368"
+"execute_delivery_loop: epsret="
+1
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpFillingStatus"
+  "Data" => array:7 [
+    "Pump" => 3
+    "Nozzle" => 1
+    "Volume" => 9.96
+    "Price" => 5.55
+    "Amount" => 55.28
+    "Transaction" => 666
+    "User" => "admin"
+  ]
+]
+"trans =666"
+"nozzle=1"
+"price =5.55"
+"volume=9.96"
+"amount=55.28"
+"delivery_progress_event()"
+string(364) "{"Header":{"Api":"infx:FCC:0.9","MessageType":"FCCDeliveryProgressEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":3,"ResponseID":0,"TXTimestamp":"2022-04-3017:12:10"},"Payload":{"DeviceID":3,"TransactionSeqNo":666,"DeliveryState":{"DeviceID":3,"TransactionSeqNo":666,"Totals":{"UnitPrice":"5.55","Volume":"9.96","Amount":"55.28"}}}}"
+364
+"\x00\x00\x01l"
+"recvEPS: return from sendEPS: ret=368"
+"execute_delivery_loop: epsret="
+1
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpFillingStatus"
+  "Data" => array:7 [
+    "Pump" => 3
+    "Nozzle" => 1
+    "Volume" => 10.59
+    "Price" => 5.55
+    "Amount" => 58.77
+    "Transaction" => 666
+    "User" => "admin"
+  ]
+]
+"trans =666"
+"nozzle=1"
+"price =5.55"
+"volume=10.59"
+"amount=58.77"
+"delivery_progress_event()"
+string(365) "{"Header":{"Api":"infx:FCC:0.9","MessageType":"FCCDeliveryProgressEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":3,"ResponseID":0,"TXTimestamp":"2022-04-3017:12:11"},"Payload":{"DeviceID":3,"TransactionSeqNo":666,"DeliveryState":{"DeviceID":3,"TransactionSeqNo":666,"Totals":{"UnitPrice":"5.55","Volume":"10.59","Amount":"58.77"}}}}"
+365
+"\x00\x00\x01m"
+"recvEPS: return from sendEPS: ret=369"
+"execute_delivery_loop: epsret="
+1
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpFillingStatus"
+  "Data" => array:7 [
+    "Pump" => 3
+    "Nozzle" => 1
+    "Volume" => 11.2
+    "Price" => 5.55
+    "Amount" => 62.16
+    "Transaction" => 666
+    "User" => "admin"
+  ]
+]
+"trans =666"
+"nozzle=1"
+"price =5.55"
+"volume=11.2"
+"amount=62.16"
+"delivery_progress_event()"
+string(364) "{"Header":{"Api":"infx:FCC:0.9","MessageType":"FCCDeliveryProgressEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":3,"ResponseID":0,"TXTimestamp":"2022-04-3017:12:12"},"Payload":{"DeviceID":3,"TransactionSeqNo":666,"DeliveryState":{"DeviceID":3,"TransactionSeqNo":666,"Totals":{"UnitPrice":"5.55","Volume":"11.2","Amount":"62.16"}}}}"
+364
+"\x00\x00\x01l"
+"recvEPS: return from sendEPS: ret=368"
+"execute_delivery_loop: epsret="
+1
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpFillingStatus"
+  "Data" => array:7 [
+    "Pump" => 3
+    "Nozzle" => 1
+    "Volume" => 11.83
+    "Price" => 5.55
+    "Amount" => 65.66
+    "Transaction" => 666
+    "User" => "admin"
+  ]
+]
+"trans =666"
+"nozzle=1"
+"price =5.55"
+"volume=11.83"
+"amount=65.66"
+"delivery_progress_event()"
+string(365) "{"Header":{"Api":"infx:FCC:0.9","MessageType":"FCCDeliveryProgressEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":3,"ResponseID":0,"TXTimestamp":"2022-04-3017:12:13"},"Payload":{"DeviceID":3,"TransactionSeqNo":666,"DeliveryState":{"DeviceID":3,"TransactionSeqNo":666,"Totals":{"UnitPrice":"5.55","Volume":"11.83","Amount":"65.66"}}}}"
+365
+"\x00\x00\x01m"
+"recvEPS: return from sendEPS: ret=369"
+"execute_delivery_loop: epsret="
+1
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpFillingStatus"
+  "Data" => array:7 [
+    "Pump" => 3
+    "Nozzle" => 1
+    "Volume" => 12.68
+    "Price" => 5.55
+    "Amount" => 70.37
+    "Transaction" => 666
+    "User" => "admin"
+  ]
+]
+"trans =666"
+"nozzle=1"
+"price =5.55"
+"volume=12.68"
+"amount=70.37"
+"delivery_progress_event()"
+string(365) "{"Header":{"Api":"infx:FCC:0.9","MessageType":"FCCDeliveryProgressEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":3,"ResponseID":0,"TXTimestamp":"2022-04-3017:12:14"},"Payload":{"DeviceID":3,"TransactionSeqNo":666,"DeliveryState":{"DeviceID":3,"TransactionSeqNo":666,"Totals":{"UnitPrice":"5.55","Volume":"12.68","Amount":"70.37"}}}}"
+365
+"\x00\x00\x01m"
+"recvEPS: return from sendEPS: ret=369"
+"execute_delivery_loop: epsret="
+1
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpFillingStatus"
+  "Data" => array:7 [
+    "Pump" => 3
+    "Nozzle" => 1
+    "Volume" => 13.31
+    "Price" => 5.55
+    "Amount" => 73.87
+    "Transaction" => 666
+    "User" => "admin"
+  ]
+]
+"trans =666"
+"nozzle=1"
+"price =5.55"
+"volume=13.31"
+"amount=73.87"
+"delivery_progress_event()"
+string(365) "{"Header":{"Api":"infx:FCC:0.9","MessageType":"FCCDeliveryProgressEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":3,"ResponseID":0,"TXTimestamp":"2022-04-3017:12:15"},"Payload":{"DeviceID":3,"TransactionSeqNo":666,"DeliveryState":{"DeviceID":3,"TransactionSeqNo":666,"Totals":{"UnitPrice":"5.55","Volume":"13.31","Amount":"73.87"}}}}"
+365
+"\x00\x00\x01m"
+"recvEPS: return from sendEPS: ret=369"
+"execute_delivery_loop: epsret="
+1
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpFillingStatus"
+  "Data" => array:7 [
+    "Pump" => 3
+    "Nozzle" => 1
+    "Volume" => 13.93
+    "Price" => 5.55
+    "Amount" => 77.31
+    "Transaction" => 666
+    "User" => "admin"
+  ]
+]
+"trans =666"
+"nozzle=1"
+"price =5.55"
+"volume=13.93"
+"amount=77.31"
+"delivery_progress_event()"
+string(365) "{"Header":{"Api":"infx:FCC:0.9","MessageType":"FCCDeliveryProgressEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":3,"ResponseID":0,"TXTimestamp":"2022-04-3017:12:16"},"Payload":{"DeviceID":3,"TransactionSeqNo":666,"DeliveryState":{"DeviceID":3,"TransactionSeqNo":666,"Totals":{"UnitPrice":"5.55","Volume":"13.93","Amount":"77.31"}}}}"
+365
+"\x00\x00\x01m"
+"recvEPS: return from sendEPS: ret=369"
+"execute_delivery_loop: epsret="
+1
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpFillingStatus"
+  "Data" => array:7 [
+    "Pump" => 3
+    "Nozzle" => 1
+    "Volume" => 14.56
+    "Price" => 5.55
+    "Amount" => 80.81
+    "Transaction" => 666
+    "User" => "admin"
+  ]
+]
+"trans =666"
+"nozzle=1"
+"price =5.55"
+"volume=14.56"
+"amount=80.81"
+"delivery_progress_event()"
+string(365) "{"Header":{"Api":"infx:FCC:0.9","MessageType":"FCCDeliveryProgressEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":3,"ResponseID":0,"TXTimestamp":"2022-04-3017:12:17"},"Payload":{"DeviceID":3,"TransactionSeqNo":666,"DeliveryState":{"DeviceID":3,"TransactionSeqNo":666,"Totals":{"UnitPrice":"5.55","Volume":"14.56","Amount":"80.81"}}}}"
+365
+"\x00\x00\x01m"
+"recvEPS: return from sendEPS: ret=369"
+"execute_delivery_loop: epsret="
+1
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpFillingStatus"
+  "Data" => array:7 [
+    "Pump" => 3
+    "Nozzle" => 1
+    "Volume" => 15.18
+    "Price" => 5.55
+    "Amount" => 84.25
+    "Transaction" => 666
+    "User" => "admin"
+  ]
+]
+"trans =666"
+"nozzle=1"
+"price =5.55"
+"volume=15.18"
+"amount=84.25"
+"delivery_progress_event()"
+string(365) "{"Header":{"Api":"infx:FCC:0.9","MessageType":"FCCDeliveryProgressEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":3,"ResponseID":0,"TXTimestamp":"2022-04-3017:12:18"},"Payload":{"DeviceID":3,"TransactionSeqNo":666,"DeliveryState":{"DeviceID":3,"TransactionSeqNo":666,"Totals":{"UnitPrice":"5.55","Volume":"15.18","Amount":"84.25"}}}}"
+365
+"\x00\x00\x01m"
+"recvEPS: return from sendEPS: ret=369"
+"execute_delivery_loop: epsret="
+1
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpFillingStatus"
+  "Data" => array:7 [
+    "Pump" => 3
+    "Nozzle" => 1
+    "Volume" => 15.81
+    "Price" => 5.55
+    "Amount" => 87.75
+    "Transaction" => 666
+    "User" => "admin"
+  ]
+]
+"trans =666"
+"nozzle=1"
+"price =5.55"
+"volume=15.81"
+"amount=87.75"
+"delivery_progress_event()"
+string(365) "{"Header":{"Api":"infx:FCC:0.9","MessageType":"FCCDeliveryProgressEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":3,"ResponseID":0,"TXTimestamp":"2022-04-3017:12:19"},"Payload":{"DeviceID":3,"TransactionSeqNo":666,"DeliveryState":{"DeviceID":3,"TransactionSeqNo":666,"Totals":{"UnitPrice":"5.55","Volume":"15.81","Amount":"87.75"}}}}"
+365
+"\x00\x00\x01m"
+"recvEPS: return from sendEPS: ret=369"
+"execute_delivery_loop: epsret="
+1
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpIdleStatus"
+  "Data" => array:9 [
+    "Pump" => 3
+    "NozzleUp" => 0
+    "Request" => ""
+    "LastNozzle" => 1
+    "LastVolume" => 15.81
+    "LastPrice" => 5.55
+    "LastAmount" => 87.75
+    "LastTransaction" => 666
+    "User" => ""
+  ]
+]
+"***** NOZZLE DOWN is detected! *****"
+"delivery_complete_event()"
+string(443) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCDeliveryCompleteEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":94,"ResponseID":0,"TXTimestamp":"2022-04-3017:12:20"},"Payload":{"FuelSale":{"DeviceID":3,"DeliveryState":"ReadyToPayOff","TransactionSeqNo":666,"ProductID":0,"NozzleID":0,"ProductDescription":"WhizBanger","PaymentData":"","DeliveryTotals":{"UnitPrice":"5.55","Volume":"15.81","Amount":"87.75"}}}}"
+443
+b"\x00\x00\x01»"
+"recvEPS: delivery_complete_event from sendEPS: ret1=447"
+"fuelpoint_state_change_event()"
+string(473) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCFuelPointStateChangeEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":12,"TXTimestamp":"2022-04-3017:12:20"},"Payload":{"FuelPointState":{"DeviceID":3,"FuelModeID":1,"DeviceState":"Idle","ProductSelected":"Valid","NozzleState":"NozzleDown","SuspendedState":"None","Reserved":true,"OperatorConsentState":"NotRequired","TransactionSeqNo":666,"ProductID":0,"NozzlesUpList":[],"ReservationID":0}}}"
+473
+b"\x00\x00\x01Ù"
+"recvEPS: fuelpoint_state_change_event from sendEPS: ret2=477"
+"execute_delivery_loop: epsret="
+array:2 [
+  0 => -1
+  1 => 477
+]
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpIdleStatus"
+  "Data" => array:9 [
+    "Pump" => 3
+    "NozzleUp" => 0
+    "Request" => ""
+    "LastNozzle" => 1
+    "LastVolume" => 15.81
+    "LastPrice" => 5.55
+    "LastAmount" => 87.75
+    "LastTransaction" => 666
+    "User" => ""
+  ]
+]
+"***** NOZZLE DOWN is detected! *****"
+"delivery_complete_event()"
+string(443) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCDeliveryCompleteEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":94,"ResponseID":0,"TXTimestamp":"2022-04-3017:12:21"},"Payload":{"FuelSale":{"DeviceID":3,"DeliveryState":"ReadyToPayOff","TransactionSeqNo":666,"ProductID":0,"NozzleID":0,"ProductDescription":"WhizBanger","PaymentData":"","DeliveryTotals":{"UnitPrice":"5.55","Volume":"15.81","Amount":"87.75"}}}}"
+443
+b"\x00\x00\x01»"
+"recvEPS: delivery_complete_event from sendEPS: ret1=447"
+"fuelpoint_state_change_event()"
+string(473) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCFuelPointStateChangeEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":12,"TXTimestamp":"2022-04-3017:12:21"},"Payload":{"FuelPointState":{"DeviceID":3,"FuelModeID":1,"DeviceState":"Idle","ProductSelected":"Valid","NozzleState":"NozzleDown","SuspendedState":"None","Reserved":true,"OperatorConsentState":"NotRequired","TransactionSeqNo":666,"ProductID":0,"NozzlesUpList":[],"ReservationID":0}}}"
+473
+b"\x00\x00\x01Ù"
+"recvEPS: fuelpoint_state_change_event from sendEPS: ret2=477"
+"execute_delivery_loop: epsret="
+array:2 [
+  0 => -1
+  1 => 477
+]
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpIdleStatus"
+  "Data" => array:9 [
+    "Pump" => 3
+    "NozzleUp" => 0
+    "Request" => ""
+    "LastNozzle" => 1
+    "LastVolume" => 15.81
+    "LastPrice" => 5.55
+    "LastAmount" => 87.75
+    "LastTransaction" => 666
+    "User" => ""
+  ]
+]
+"***** NOZZLE DOWN is detected! *****"
+"delivery_complete_event()"
+string(443) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCDeliveryCompleteEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":94,"ResponseID":0,"TXTimestamp":"2022-04-3017:12:22"},"Payload":{"FuelSale":{"DeviceID":3,"DeliveryState":"ReadyToPayOff","TransactionSeqNo":666,"ProductID":0,"NozzleID":0,"ProductDescription":"WhizBanger","PaymentData":"","DeliveryTotals":{"UnitPrice":"5.55","Volume":"15.81","Amount":"87.75"}}}}"
+443
+b"\x00\x00\x01»"
+"recvEPS: delivery_complete_event from sendEPS: ret1=447"
+"fuelpoint_state_change_event()"
+string(473) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCFuelPointStateChangeEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":12,"TXTimestamp":"2022-04-3017:12:22"},"Payload":{"FuelPointState":{"DeviceID":3,"FuelModeID":1,"DeviceState":"Idle","ProductSelected":"Valid","NozzleState":"NozzleDown","SuspendedState":"None","Reserved":true,"OperatorConsentState":"NotRequired","TransactionSeqNo":666,"ProductID":0,"NozzlesUpList":[],"ReservationID":0}}}"
+473
+b"\x00\x00\x01Ù"
+"recvEPS: fuelpoint_state_change_event from sendEPS: ret2=477"
+"execute_delivery_loop: epsret="
+array:2 [
+  0 => -1
+  1 => 477
+]
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpIdleStatus"
+  "Data" => array:9 [
+    "Pump" => 3
+    "NozzleUp" => 0
+    "Request" => ""
+    "LastNozzle" => 1
+    "LastVolume" => 15.81
+    "LastPrice" => 5.55
+    "LastAmount" => 87.75
+    "LastTransaction" => 666
+    "User" => ""
+  ]
+]
+"***** NOZZLE DOWN is detected! *****"
+"delivery_complete_event()"
+string(443) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCDeliveryCompleteEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":94,"ResponseID":0,"TXTimestamp":"2022-04-3017:12:23"},"Payload":{"FuelSale":{"DeviceID":3,"DeliveryState":"ReadyToPayOff","TransactionSeqNo":666,"ProductID":0,"NozzleID":0,"ProductDescription":"WhizBanger","PaymentData":"","DeliveryTotals":{"UnitPrice":"5.55","Volume":"15.81","Amount":"87.75"}}}}"
+443
+b"\x00\x00\x01»"
+"recvEPS: delivery_complete_event from sendEPS: ret1=447"
+"fuelpoint_state_change_event()"
+string(473) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCFuelPointStateChangeEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":12,"TXTimestamp":"2022-04-3017:12:23"},"Payload":{"FuelPointState":{"DeviceID":3,"FuelModeID":1,"DeviceState":"Idle","ProductSelected":"Valid","NozzleState":"NozzleDown","SuspendedState":"None","Reserved":true,"OperatorConsentState":"NotRequired","TransactionSeqNo":666,"ProductID":0,"NozzlesUpList":[],"ReservationID":0}}}"
+473
+b"\x00\x00\x01Ù"
+"recvEPS: fuelpoint_state_change_event from sendEPS: ret2=477"
+"execute_delivery_loop: epsret="
+array:2 [
+  0 => -1
+  1 => 477
+]
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpIdleStatus"
+  "Data" => array:9 [
+    "Pump" => 3
+    "NozzleUp" => 0
+    "Request" => ""
+    "LastNozzle" => 1
+    "LastVolume" => 15.81
+    "LastPrice" => 5.55
+    "LastAmount" => 87.75
+    "LastTransaction" => 666
+    "User" => ""
+  ]
+]
+"***** NOZZLE DOWN is detected! *****"
+"delivery_complete_event()"
+string(443) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCDeliveryCompleteEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":94,"ResponseID":0,"TXTimestamp":"2022-04-3017:12:24"},"Payload":{"FuelSale":{"DeviceID":3,"DeliveryState":"ReadyToPayOff","TransactionSeqNo":666,"ProductID":0,"NozzleID":0,"ProductDescription":"WhizBanger","PaymentData":"","DeliveryTotals":{"UnitPrice":"5.55","Volume":"15.81","Amount":"87.75"}}}}"
+443
+b"\x00\x00\x01»"
+"recvEPS: delivery_complete_event from sendEPS: ret1=447"
+"fuelpoint_state_change_event()"
+string(473) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCFuelPointStateChangeEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":12,"TXTimestamp":"2022-04-3017:12:24"},"Payload":{"FuelPointState":{"DeviceID":3,"FuelModeID":1,"DeviceState":"Idle","ProductSelected":"Valid","NozzleState":"NozzleDown","SuspendedState":"None","Reserved":true,"OperatorConsentState":"NotRequired","TransactionSeqNo":666,"ProductID":0,"NozzlesUpList":[],"ReservationID":0}}}"
+473
+b"\x00\x00\x01Ù"
+"recvEPS: fuelpoint_state_change_event from sendEPS: ret2=477"
+"execute_delivery_loop: epsret="
+array:2 [
+  0 => -1
+  1 => 477
+]
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpIdleStatus"
+  "Data" => array:9 [
+    "Pump" => 3
+    "NozzleUp" => 0
+    "Request" => ""
+    "LastNozzle" => 1
+    "LastVolume" => 15.81
+    "LastPrice" => 5.55
+    "LastAmount" => 87.75
+    "LastTransaction" => 666
+    "User" => ""
+  ]
+]
+"***** NOZZLE DOWN is detected! *****"
+"delivery_complete_event()"
+string(443) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCDeliveryCompleteEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":94,"ResponseID":0,"TXTimestamp":"2022-04-3017:12:25"},"Payload":{"FuelSale":{"DeviceID":3,"DeliveryState":"ReadyToPayOff","TransactionSeqNo":666,"ProductID":0,"NozzleID":0,"ProductDescription":"WhizBanger","PaymentData":"","DeliveryTotals":{"UnitPrice":"5.55","Volume":"15.81","Amount":"87.75"}}}}"
+443
+b"\x00\x00\x01»"
+"recvEPS: delivery_complete_event from sendEPS: ret1=447"
+"fuelpoint_state_change_event()"
+string(473) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCFuelPointStateChangeEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":12,"TXTimestamp":"2022-04-3017:12:25"},"Payload":{"FuelPointState":{"DeviceID":3,"FuelModeID":1,"DeviceState":"Idle","ProductSelected":"Valid","NozzleState":"NozzleDown","SuspendedState":"None","Reserved":true,"OperatorConsentState":"NotRequired","TransactionSeqNo":666,"ProductID":0,"NozzlesUpList":[],"ReservationID":0}}}"
+473
+b"\x00\x00\x01Ù"
+"recvEPS: fuelpoint_state_change_event from sendEPS: ret2=477"
+"execute_delivery_loop: epsret="
+array:2 [
+  0 => -1
+  1 => 477
+]
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpIdleStatus"
+  "Data" => array:9 [
+    "Pump" => 3
+    "NozzleUp" => 0
+    "Request" => ""
+    "LastNozzle" => 1
+    "LastVolume" => 15.81
+    "LastPrice" => 5.55
+    "LastAmount" => 87.75
+    "LastTransaction" => 666
+    "User" => ""
+  ]
+]
+"***** NOZZLE DOWN is detected! *****"
+"delivery_complete_event()"
+string(443) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCDeliveryCompleteEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":94,"ResponseID":0,"TXTimestamp":"2022-04-3017:12:26"},"Payload":{"FuelSale":{"DeviceID":3,"DeliveryState":"ReadyToPayOff","TransactionSeqNo":666,"ProductID":0,"NozzleID":0,"ProductDescription":"WhizBanger","PaymentData":"","DeliveryTotals":{"UnitPrice":"5.55","Volume":"15.81","Amount":"87.75"}}}}"
+443
+b"\x00\x00\x01»"
+"recvEPS: delivery_complete_event from sendEPS: ret1=447"
+"fuelpoint_state_change_event()"
+string(473) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCFuelPointStateChangeEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":12,"TXTimestamp":"2022-04-3017:12:26"},"Payload":{"FuelPointState":{"DeviceID":3,"FuelModeID":1,"DeviceState":"Idle","ProductSelected":"Valid","NozzleState":"NozzleDown","SuspendedState":"None","Reserved":true,"OperatorConsentState":"NotRequired","TransactionSeqNo":666,"ProductID":0,"NozzlesUpList":[],"ReservationID":0}}}"
+473
+b"\x00\x00\x01Ù"
+"recvEPS: fuelpoint_state_change_event from sendEPS: ret2=477"
+"execute_delivery_loop: epsret="
+array:2 [
+  0 => -1
+  1 => 477
+]
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpIdleStatus"
+  "Data" => array:9 [
+    "Pump" => 3
+    "NozzleUp" => 0
+    "Request" => ""
+    "LastNozzle" => 1
+    "LastVolume" => 15.81
+    "LastPrice" => 5.55
+    "LastAmount" => 87.75
+    "LastTransaction" => 666
+    "User" => ""
+  ]
+]
+"***** NOZZLE DOWN is detected! *****"
+"delivery_complete_event()"
+string(443) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCDeliveryCompleteEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":94,"ResponseID":0,"TXTimestamp":"2022-04-3017:12:27"},"Payload":{"FuelSale":{"DeviceID":3,"DeliveryState":"ReadyToPayOff","TransactionSeqNo":666,"ProductID":0,"NozzleID":0,"ProductDescription":"WhizBanger","PaymentData":"","DeliveryTotals":{"UnitPrice":"5.55","Volume":"15.81","Amount":"87.75"}}}}"
+443
+b"\x00\x00\x01»"
+"recvEPS: delivery_complete_event from sendEPS: ret1=447"
+"fuelpoint_state_change_event()"
+string(473) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCFuelPointStateChangeEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":12,"TXTimestamp":"2022-04-3017:12:27"},"Payload":{"FuelPointState":{"DeviceID":3,"FuelModeID":1,"DeviceState":"Idle","ProductSelected":"Valid","NozzleState":"NozzleDown","SuspendedState":"None","Reserved":true,"OperatorConsentState":"NotRequired","TransactionSeqNo":666,"ProductID":0,"NozzlesUpList":[],"ReservationID":0}}}"
+473
+b"\x00\x00\x01Ù"
+"recvEPS: fuelpoint_state_change_event from sendEPS: ret2=477"
+"execute_delivery_loop: epsret="
+array:2 [
+  0 => -1
+  1 => 477
+]
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpIdleStatus"
+  "Data" => array:9 [
+    "Pump" => 3
+    "NozzleUp" => 0
+    "Request" => ""
+    "LastNozzle" => 1
+    "LastVolume" => 15.81
+    "LastPrice" => 5.55
+    "LastAmount" => 87.75
+    "LastTransaction" => 666
+    "User" => ""
+  ]
+]
+"***** NOZZLE DOWN is detected! *****"
+"delivery_complete_event()"
+string(443) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCDeliveryCompleteEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":94,"ResponseID":0,"TXTimestamp":"2022-04-3017:12:28"},"Payload":{"FuelSale":{"DeviceID":3,"DeliveryState":"ReadyToPayOff","TransactionSeqNo":666,"ProductID":0,"NozzleID":0,"ProductDescription":"WhizBanger","PaymentData":"","DeliveryTotals":{"UnitPrice":"5.55","Volume":"15.81","Amount":"87.75"}}}}"
+443
+b"\x00\x00\x01»"
+"recvEPS: delivery_complete_event from sendEPS: ret1=447"
+"fuelpoint_state_change_event()"
+string(473) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCFuelPointStateChangeEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":12,"TXTimestamp":"2022-04-3017:12:28"},"Payload":{"FuelPointState":{"DeviceID":3,"FuelModeID":1,"DeviceState":"Idle","ProductSelected":"Valid","NozzleState":"NozzleDown","SuspendedState":"None","Reserved":true,"OperatorConsentState":"NotRequired","TransactionSeqNo":666,"ProductID":0,"NozzlesUpList":[],"ReservationID":0}}}"
+473
+b"\x00\x00\x01Ù"
+"recvEPS: fuelpoint_state_change_event from sendEPS: ret2=477"
+"execute_delivery_loop: epsret="
+array:2 [
+  0 => -1
+  1 => 477
+]
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpIdleStatus"
+  "Data" => array:9 [
+    "Pump" => 3
+    "NozzleUp" => 0
+    "Request" => ""
+    "LastNozzle" => 1
+    "LastVolume" => 15.81
+    "LastPrice" => 5.55
+    "LastAmount" => 87.75
+    "LastTransaction" => 666
+    "User" => ""
+  ]
+]
+"***** NOZZLE DOWN is detected! *****"
+"delivery_complete_event()"
+string(443) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCDeliveryCompleteEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":94,"ResponseID":0,"TXTimestamp":"2022-04-3017:12:29"},"Payload":{"FuelSale":{"DeviceID":3,"DeliveryState":"ReadyToPayOff","TransactionSeqNo":666,"ProductID":0,"NozzleID":0,"ProductDescription":"WhizBanger","PaymentData":"","DeliveryTotals":{"UnitPrice":"5.55","Volume":"15.81","Amount":"87.75"}}}}"
+443
+b"\x00\x00\x01»"
+"recvEPS: delivery_complete_event from sendEPS: ret1=447"
+"fuelpoint_state_change_event()"
+string(473) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCFuelPointStateChangeEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":12,"TXTimestamp":"2022-04-3017:12:29"},"Payload":{"FuelPointState":{"DeviceID":3,"FuelModeID":1,"DeviceState":"Idle","ProductSelected":"Valid","NozzleState":"NozzleDown","SuspendedState":"None","Reserved":true,"OperatorConsentState":"NotRequired","TransactionSeqNo":666,"ProductID":0,"NozzlesUpList":[],"ReservationID":0}}}"
+473
+b"\x00\x00\x01Ù"
+"recvEPS: fuelpoint_state_change_event from sendEPS: ret2=477"
+"execute_delivery_loop: epsret="
+array:2 [
+  0 => -1
+  1 => 477
+]
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpIdleStatus"
+  "Data" => array:9 [
+    "Pump" => 3
+    "NozzleUp" => 0
+    "Request" => ""
+    "LastNozzle" => 1
+    "LastVolume" => 15.81
+    "LastPrice" => 5.55
+    "LastAmount" => 87.75
+    "LastTransaction" => 666
+    "User" => ""
+  ]
+]
+"***** NOZZLE DOWN is detected! *****"
+"delivery_complete_event()"
+string(443) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCDeliveryCompleteEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":94,"ResponseID":0,"TXTimestamp":"2022-04-3017:12:30"},"Payload":{"FuelSale":{"DeviceID":3,"DeliveryState":"ReadyToPayOff","TransactionSeqNo":666,"ProductID":0,"NozzleID":0,"ProductDescription":"WhizBanger","PaymentData":"","DeliveryTotals":{"UnitPrice":"5.55","Volume":"15.81","Amount":"87.75"}}}}"
+443
+b"\x00\x00\x01»"
+"recvEPS: delivery_complete_event from sendEPS: ret1=447"
+"fuelpoint_state_change_event()"
+string(473) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCFuelPointStateChangeEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":12,"TXTimestamp":"2022-04-3017:12:30"},"Payload":{"FuelPointState":{"DeviceID":3,"FuelModeID":1,"DeviceState":"Idle","ProductSelected":"Valid","NozzleState":"NozzleDown","SuspendedState":"None","Reserved":true,"OperatorConsentState":"NotRequired","TransactionSeqNo":666,"ProductID":0,"NozzlesUpList":[],"ReservationID":0}}}"
+473
+b"\x00\x00\x01Ù"
+"recvEPS: fuelpoint_state_change_event from sendEPS: ret2=477"
+"execute_delivery_loop: epsret="
+array:2 [
+  0 => -1
+  1 => 477
+]
+"execute_delivery_loop: packet="
+array:3 [
+  "Id" => 1
+  "Type" => "PumpIdleStatus"
+  "Data" => array:9 [
+    "Pump" => 3
+    "NozzleUp" => 0
+    "Request" => ""
+    "LastNozzle" => 1
+    "LastVolume" => 15.81
+    "LastPrice" => 5.55
+    "LastAmount" => 87.75
+    "LastTransaction" => 666
+    "User" => ""
+  ]
+]
+"***** NOZZLE DOWN is detected! *****"
+"delivery_complete_event()"
+string(443) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCDeliveryCompleteEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":94,"ResponseID":0,"TXTimestamp":"2022-04-3017:12:31"},"Payload":{"FuelSale":{"DeviceID":3,"DeliveryState":"ReadyToPayOff","TransactionSeqNo":666,"ProductID":0,"NozzleID":0,"ProductDescription":"WhizBanger","PaymentData":"","DeliveryTotals":{"UnitPrice":"5.55","Volume":"15.81","Amount":"87.75"}}}}"
+443
+b"\x00\x00\x01»"
+"recvEPS: delivery_complete_event from sendEPS: ret1=447"
+"fuelpoint_state_change_event()"
+string(473) "{"Header":{"Api":"infx:fcc:0.9","MessageType":"FCCFuelPointStateChangeEvent","ApplicationSender":"InfxFCC","WorkstationID":"OPOSSUM_POS1","MessageID":12,"TXTimestamp":"2022-04-3017:12:31"},"Payload":{"FuelPointState":{"DeviceID":3,"FuelModeID":1,"DeviceState":"Idle","ProductSelected":"Valid","NozzleState":"NozzleDown","SuspendedState":"None","Reserved":true,"OperatorConsentState":"NotRequired","TransactionSeqNo":666,"ProductID":0,"NozzlesUpList":[],"ReservationID":0}}}"
+473
+b"\x00\x00\x01Ù"
+"recvEPS: fuelpoint_state_change_event from sendEPS: ret2=477"
+"execute_delivery_loop: epsret="
+array:2 [
+  0 => -1
+  1 => 477
+]
+^C
+user@server:~

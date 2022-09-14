@@ -1,0 +1,7 @@
+N-Shift Login Feature
+--This line, and those below, will be ignored--
+
+M    app/Http/Controllers/AccessController.php
+M    routes/custom/access_routes.php
+M    resources/views/landing/landing.blade.php
+M    app/Http/Controllers/LocalCabinetController.php

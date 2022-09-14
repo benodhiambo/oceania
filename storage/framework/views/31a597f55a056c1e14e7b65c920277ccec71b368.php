@@ -1,0 +1,2 @@
+<script src="<?php echo e(asset('js/JsBarcode.all.min.js')); ?>"></script>
+<script src="<?php echo e(asset('js/qrcode.min.js')); ?>"></script><?php /**PATH /home/dev/oceania/trunk/oceania/resources/views/common/barcode_header.blade.php ENDPATH**/ ?>

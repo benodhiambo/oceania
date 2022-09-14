@@ -1,0 +1,1038 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Classes\SystemID;
+use App\Models\MerchantPrdCategory;
+use App\Models\MerchantProduct;
+use App\Models\PrdBrand;
+use App\Models\PrdCategory;
+use App\Models\Company;
+use App\Models\PrdOpenitem;
+use App\Models\PrdPrdCategory;
+use App\Models\PrdSubCategory;
+use App\Models\Product;
+use App\Models\Location;
+use Milon\Barcode\DNS1D;
+use Milon\Barcode\DNS2D;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Intervention\Image\Facades\Image;
+use Yajra\DataTables\DataTables;
+use DB;
+use App\Http\Controllers\SyncSalesController;
+
+class OpenitemController extends Controller
+{
+    public static $IMG_PRODUCT_LINK = "images/product/";
+    function openitem()
+    {
+        try {
+
+            $test = null;
+
+            return view(
+                'openitem.openitem_landing',
+                compact('test')
+            );
+        } catch (Exception $e) {
+            Log::error([
+                "Error" => $e->getMessage(),
+                "File" => $e->getFile(),
+                "Line" => $e->getLine()
+            ]);
+            abort(404);
+        }
+    }
+
+
+    function save()
+    {
+        try {
+            $data = array();
+            // WARNING: Hardcoding location_id=1
+            $systemid = SystemID::openitem_system_id(1);
+            $merchant = DB::table('company')->first();
+            $product = Product::create([
+                "systemid" => $systemid,
+                "name" => null,
+                'ptype' => 'openitem'
+            ]);
+
+            $prdOpenitem = PrdOpenitem::create([
+                "product_id" => $product->id,
+                "price" => 0.00,
+                "qty" => 0,
+                "loyalty" => $merchant->loyalty_pgm
+            ]);
+
+            if (Auth::user() != null) {
+                $merchant_pdr = MerchantProduct::create([
+                    "product_id" => $product->id,
+                    "merchant_id" => $merchant->id
+                ]);
+                $data['merchant_pdr'] = DB::table('merchantproduct')->
+					whereId($merchant_pdr->id)->first();
+            }
+
+            //gather open item data
+            $data['prd_openitem'] = DB::table('prd_openitem')->
+				whereId($prdOpenitem->id)->first();
+
+            $data['product'] = DB::table('product')->
+				whereId($product->id)->first();
+
+            //send the data to OCOSYSTEM
+            SyncSalesController::curlRequest(
+                env('MOTHERSHIP_URL') . '/sync-openitem',
+                json_encode($data)
+            );
+
+            return [
+                "data" => $prdOpenitem,
+                "error" => false
+            ];
+        } catch (Exception $e) {
+            return [
+                "message" => $e->getMessage(),
+                "error" => true
+            ];
+        }
+    }
+
+
+    function listPrdOpenitem()
+    {
+        try {
+            PrdOpenitem::get()->map(function ($f) {
+                $f->qty = app("App\Http\Controllers\CentralStockMgmtController")->
+				qtyAvailable($f->product_id);
+                $f->update();
+            });
+
+            $data = PrdOpenitem::has('product')->
+				with("product")->select('*')->get();
+
+            foreach ($data as $prd) {
+                $prd->cost_value = $prd->cost * $prd->qty;
+
+                $transaction = DB::table('cstore_receiptproduct')->
+					where('product_id', $prd->product_id)->first();
+
+                $stock = DB::table('stockreportproduct')->
+					where('product_id', $prd->product_id)->first();
+
+                if (empty($transaction) &&  empty($stock)) {
+                    $prd->can_delete = true;
+                } else {
+                    $prd->can_delete = false;
+                }
+            }
+
+            return Datatables::of($data)->addIndexColumn()->
+				editColumn('cost', function ($data) {
+                $cost = $data;
+                return $cost;
+            })->editColumn('qty', function ($data) {
+                $qty = $data;
+                return $qty;
+            })->editColumn('cost_value', function ($data) {
+                $cost_value = $data;
+
+                DB::table('prd_openitem')->where(
+                    'id', $data->id
+                )->update([
+                    'costvalue' => $data->cost * $data->qty,
+                    'updated_at' => date('Y-m-d H:i:s'),
+                ]);
+
+                return $cost_value;
+            })->editColumn('loyalty', function ($data) {
+                $loyalty = $data;
+                return $loyalty;
+            })->editColumn('royalty', function ($data) {
+                $royalty = $data;
+                return $royalty;
+            })->editColumn('price', function ($data) {
+                $price = $data;
+                return $price;
+            })->addColumn('action', function ($row) {
+
+                if ($row->can_delete == true) {
+                    $btn = '<a  href="javascript:void(0)" onclick="deleteMe(' .
+						$row->id . ',' . $row->product_id . ')" data-row="' .
+						$row->id . '" class="delete"> <img width="25px" src="images/redcrab_50x50.png" alt=""> </a>';
+                    return $btn;
+                }
+                $btn = '<a  style="text-decoration: none;  filter: grayscale(100) brightness(1.5); pointer-events: none;cursor: default;" class="delete"> <img width="25px" src="images/redcrab_50x50.png" alt=""> </a>';
+                return $btn;
+            })->rawColumns(['action'])->make(true);
+        } catch (Exception $e) {
+            return ["message" => $e->getMessage(), "error" => false];
+        }
+    }
+
+
+    function detailProduct(Request $request)
+    {
+        try {
+            $product_details = Product::whereId($request->id)->first();
+            /*
+			$product_category = PrdCategory::all();
+            $product_brand = PrdBrand::all();
+            $product_subcategory = PrdSubCategory::all();
+			$product_product = PrdPrdCategory::all();
+			*/
+            return view(
+                "openitem.product_details",
+                compact("product_details")
+            );
+        } catch (Exception $e) {
+            return ["message" => $e->getMessage(), "error" => false];
+        }
+    }
+
+
+    function updateCustom(Request $request)
+    {
+        try {
+            $data = [
+                "name" =>
+                $request->product_name == null ?
+                    null : $request->product_name,
+            ];
+
+            if (Auth::user() != null) {
+                $merchant = DB::table('company')->first();
+                MerchantPrdCategory::create([
+                    "category_id" => 0,
+                    "merchant_id" => $merchant->id
+                ]);
+            }
+
+            $prd = Product::where(
+                "systemid",
+                $request->systemid
+            )->update($data);
+
+            return [
+                "data" => $prd,
+                "error" => false
+            ];
+        } catch (Exception $e) {
+            return [
+                "message" => $e->getMessage(),
+                "error" => true
+            ];
+        }
+    }
+
+
+    function get_dropDown($OPTION, $KEY)
+    {
+        $data = [];
+        if ($OPTION == "subcat") {
+            $data = PrdSubCategory::where("category_id", $KEY)->get();
+        } else {
+            $data = PrdPrdCategory::where("subcategory_id", $KEY)->get();
+        }
+
+        return $data;
+    }
+
+
+    function delPicture(Request $request)
+    {
+        try {
+            $data = [
+                "thumbnail_1" => null,
+                "photo_1" => null,
+            ];
+
+            $prd = Product::where(
+                "systemid",
+                $request->systemid
+            )->update($data);
+
+            return [
+                "data" => $prd,
+                "error" => false
+            ];
+        } catch (Exception $e) {
+            return [
+                "message" => $e->getMessage(),
+                "error" => true
+            ];
+        }
+    }
+
+
+    function savePicture(Request $request)
+    {
+        try {
+
+            if ($request->file != null) {
+                $filename = $this->generatePhotoName(
+                    $request->file->getClientOriginalExtension()
+                );
+
+                $request->file->move(public_path(self::$IMG_PRODUCT_LINK .
+                    $request->product_id . "/"), $filename);
+
+                $path = public_path(self::$IMG_PRODUCT_LINK . $request->product_id . "/") . "thumb/";
+                if (!file_exists($path)) {
+                    File::makeDirectory($path, $mode = 0777, true, true);
+                }
+                $thumb_path = public_path(self::$IMG_PRODUCT_LINK . $request->product_id . "/") .
+                    "thumb/" . "thumb_" . $filename;
+
+                File::copy(
+                    public_path(self::$IMG_PRODUCT_LINK . $request->product_id . "/" . $filename),
+                    $thumb_path
+                );
+
+                $img = Image::make($thumb_path);
+                $img->resize(200, 200, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($thumb_path);
+
+                $data["photo_1"] = $filename;
+                $data["thumbnail_1"] = "thumb_" . $filename;
+            }
+
+            Product::where("systemid", $request->product_id)->update($data);
+
+            $prd = Product::where("systemid", $request->product_id)->first();
+
+            return [
+                "name" => $prd->name,
+                "src" => self::$IMG_PRODUCT_LINK .
+                    $request->product_id . "/" . $filename,
+                "error" => false
+            ];
+        } catch (Exception $e) {
+            return [
+                "message" => $e->getMessage(),
+                "error" => true
+            ];
+        }
+    }
+
+
+    function updateOpen(Request $request)
+    {
+        $data = [
+            $request->key => $request->value,
+        ];
+
+        $prdOpen = PrdOpenitem::where("id", $request->element)->update($data);
+
+        return [
+            "data" => $prdOpen,
+            "error" => false
+        ];
+    }
+
+    public function save_prd_cost(Request $request)
+    {
+        try {
+            $product = DB::table('product')
+                ->where('systemid', $request->product_id)
+                ->select('id')->first();
+
+            if (!empty($product)) {
+                DB::table('prd_openitem')->where(
+                    'product_id',
+                    $product->id
+                )->update([
+                    'cost' => $request->cost_amount,
+                    'updated_at' => date('Y-m-d H:i:s'),
+                ]);
+            } else {
+                Log::error([
+                    'Message' => "Product Cost Update failed. Product Not found",
+                    'ProductId' => $request->product_id,
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error([
+                'Message' => $e->getMessage(),
+                'File' => $e->getFile(),
+                'Line' => $e->getLine(),
+            ]);
+        }
+    }
+
+    function deleteOpen(Request $request)
+    {
+        $prdOpen = PrdOpenitem::where("id", $request->id)->first();
+        if (!empty($prdOpen)) {
+            Product::find($prdOpen->product_id)->delete();
+            PrdOpenitem::find($request->id)->delete();
+            $ret = ["data" => $prdOpen, "error" => false];
+        } else {
+            $ret = ["data" => [], "error" => true];
+        }
+        return $ret;
+    }
+
+
+    function generatePhotoName($ext)
+    {
+        return "p" . time() . "-m" . $this->generateRandomString(14) . "." . $ext;
+    }
+
+
+    function generateRandomString($length = 10)
+    {
+        $characters = '0123456789';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+
+    function prdLedger($systemid)
+    {
+        try {
+
+            $product = Product::where("systemid", $systemid)->first();
+
+            $location = Location::first();
+            $data = collect();
+
+            DB::table('cstore_receipt')->
+				select('cstore_receipt.*', 'cstore_receiptproduct.quantity as quantity', 'cstore_receiptdetails.id as receiptdetails_id')->
+				join('cstore_receiptproduct', 'cstore_receipt.id', 'cstore_receiptproduct.receipt_id')->
+				leftJoin('cstore_receiptdetails', 'cstore_receipt.id', 'cstore_receiptdetails.receipt_id')->
+				orderBy('cstore_receipt.updated_at', "desc")->
+				where("cstore_receiptproduct.product_id", $product->id)->
+				get()->map(function ($product) use ($data) {
+
+                $packet = collect();
+                $packet->id            = $product->id;
+                $packet->status     = $product->status;
+                $packet->systemid    = $product->systemid;
+                $packet->quantity    = $product->quantity * -1;
+                $packet->created_at = $product->created_at;
+                $packet->voided_at    = $product->voided_at;
+                $packet->doc_type    = "Cash Sales";
+                $data->push($packet);
+            });
+
+            DB::table('stockreportproduct')->
+				leftjoin('stockreport', 'stockreport.id', 'stockreportproduct.stockreport_id')->
+				where('stockreportproduct.product_id', $product->id)->
+				orderBy('stockreport.updated_at', "desc")->
+				get()->map(function ($product) use ($data) {
+
+                $packet = collect();
+                $packet->id            = $product->id;
+                $packet->status     = $product->status;
+                $packet->systemid    = $product->systemid;
+                $packet->quantity    = $product->quantity;
+                $packet->created_at = $product->created_at;
+                $packet->voided_at    = $product->voided_at ?? "";
+                $packet->doc_type    = ucfirst($product->type);
+                $data->push($packet);
+            });
+
+			/* Here you store the $data into a storage table:
+			   openitem_productledger */
+
+
+
+			$data = $data->sortByDesc('created_at')->values();
+
+            return view(
+                'openitem.openitem_productledger',
+                compact('product', 'data', 'location')
+            );
+        } catch (Exception $e) {
+            Log::error([
+                "Error" => $e->getMessage(),
+                "File" => $e->getFile(),
+                "Line" => $e->getLine()
+            ]);
+            abort(404);
+        }
+    }
+
+
+    function openitemStockout()
+    {
+        try {
+
+            $location = DB::table('location')->first();
+            return view('openitem.openitem_stockout', compact('location'));
+        } catch (Exception $e) {
+            Log::error([
+                "Error" => $e->getMessage(),
+                "File" => $e->getFile(),
+                "Line" => $e->getLine()
+            ]);
+            abort(404);
+        }
+    }
+
+
+    function openitemStockin()
+    {
+        try {
+
+            $location = DB::table('location')->first();
+            return view('openitem.openitem_stockin', compact('location'));
+        } catch (Exception $e) {
+            Log::error([
+                "Error" => $e->getMessage(),
+                "File" => $e->getFile(),
+                "Line" => $e->getLine()
+            ]);
+            abort(404);
+        }
+    }
+
+
+
+    function stockOutList()
+    {
+        try {
+
+            $product_data_open_item = DB::table('product')->join('prd_openitem', 'prd_openitem.product_id', 'product.id')->whereNotNull([
+                'product.name',
+                // 'product.thumbnail_1'
+            ])->where('prd_openitem.qty', '>', '0')->select("product.*", "prd_openitem.price as recommended_price")->get();
+
+            $product_data_open_item = $product_data_open_item->filter(function ($product) {
+                return app("App\Http\Controllers\CentralStockMgmtController")->qtyAvailable($product->id) > 0;
+            });
+
+            return Datatables::of($product_data_open_item)->addIndexColumn()->addColumn('product_systemid', function ($data) {
+                return $data->systemid;
+            })->addColumn('product_name', function ($data) {
+                $img_src = '/images/product/' .
+                    $data->systemid . '/thumb/' .
+                    $data->thumbnail_1;
+
+                $img = "<img src='$img_src' data-field='inven_pro_name' style=' width: 25px;
+						height: 25px;display: inline-block;margin-right: 8px;object-fit:contain;'>";
+
+                return $img . $data->name;
+            })->addColumn('product_qty', function ($data) {
+                $product_id = $data->id;
+                $qty = app("App\Http\Controllers\CentralStockMgmtController")->qtyAvailable($product_id);
+                return <<<EOD
+						<span id="qty_$product_id">$qty</span>
+EOD;
+            })->addColumn('action', function ($data) {
+                $product_id = $data->id;
+                return view('fuel_stockmgmt.inven_qty', compact('product_id'));
+            })->rawColumns(['action'])->escapeColumns([])->make(true);
+        } catch (Exception $e) {
+            return [
+                "message" => $e->getMessage(),
+                "error" => true
+            ];
+        }
+    }
+
+
+    function stockInList()
+    {
+        try {
+
+            $product_data_open_item = DB::table('product')->
+				join('prd_openitem', 'prd_openitem.product_id', 'product.id')->
+				whereNotNull([
+                'product.name',
+                //'product.thumbnail_1'
+            ])->select("product.*", "prd_openitem.price as recommended_price")->get();
+
+            return Datatables::of($product_data_open_item)->addIndexColumn()->
+				addColumn('product_systemid', function ($data) {
+                return $data->systemid;
+            })->addColumn('product_name', function ($data) {
+
+                if (!empty($data->thumbnail_1)) {
+                    $img_src = '/images/product/' .
+                        $data->systemid . '/thumb/' .
+                        $data->thumbnail_1;
+                } else {
+                    $img_src = '';
+                }
+
+
+                $img = "<img src='$img_src' data-field='inven_pro_name' style=' width: 25px;
+						height: 25px;display: inline-block;margin-right: 8px;object-fit:contain;'>";
+
+                return $img . $data->name;
+            })->addColumn('product_qty', function ($data) {
+                $product_id = $data->id;
+                $qty = app("App\Http\Controllers\CentralStockMgmtController")->qtyAvailable($product_id);
+                return <<<EOD
+						<span id="qty_$product_id">$qty</span>
+EOD;
+            })->addColumn('action', function ($data) {
+                $product_id = $data->id;
+                return view('fuel_stockmgmt.inven_qty', compact('product_id'));
+            })->rawColumns(['action'])->escapeColumns([])->make(true);
+        } catch (Exception $e) {
+            return [
+                "message" => $e->getMessage(),
+                "error" => true
+            ];
+        }
+    }
+
+
+    public function product_has_qty(Request $request)
+    {
+        try {
+            $product = DB::table('prd_openitem')->
+				where('product_id', $request->product_id)->first();
+
+            if (!empty($product) && $product->qty > 0) {
+                return response()->json([
+                    'has_qty' => true,
+                ]);
+            }
+            return response()->json([
+                'has_qty' => false,
+            ]);
+        } catch (\Exception $e) {
+            Log::error([
+                'Message' => $e->getMessage(),
+                'File' => $e->getFile(),
+                'Line' => $e->getLine(),
+            ]);
+        }
+    }
+
+
+    public function product_barcode(Request $request)
+    {
+
+        $system_id = $request->route('systemid');
+
+        $product = DB::table('product')->
+			join('prd_openitem', 'prd_openitem.product_id', 'product.id')->
+			where('product.systemid', $system_id)->first();
+
+        $product_id = $product->id;
+        return view(
+            'openitem.openitem_barcode',
+            compact('system_id', 'product', 'product_id')
+        );
+    }
+
+
+    function delete_product_barcode(Request $request)
+    {
+        $prd_barcode = DB::table('productbarcode')->
+			where("barcode", $request->barcode)->
+			whereNull('deleted_at')->first();
+
+        if (!empty($prd_barcode)) {
+            DB::table('productbarcode')->
+				where('barcode', $request->barcode)->
+				whereNull('deleted_at')->update([
+                'deleted_at' => date('Y-m-d H:i:s'),
+            ]);
+            $ret = ["data" => $prd_barcode, "error" => false];
+        } else {
+            $ret = ["data" => [], "error" => true];
+        }
+        return $ret;
+    }
+
+
+    public function show_barcode_table(Request $request)
+    {
+        try {
+            $product = DB::table('prd_openitem')->
+				join('product', 'prd_openitem.product_id', 'product.id')->
+				where('prd_openitem.id', $request->prd_id)
+                ->first();
+
+            $barcode = [];
+
+            $default = collect();
+
+            $default['systemid'] = $product->systemid;
+
+            $barcode[] = $default;
+
+            $productbarcode = DB::table('productbarcode')->
+				where('product_id', $product->id)->
+				whereNull('deleted_at')->orderBy('id', 'desc')->get();
+
+            // Prepend a new record at the start of the collection
+            $o = new \stdClass();
+            $o->id = $product->id;
+            $o->product_id = $product->id;
+            $o->barcode = $product->systemid;
+            $productbarcode->prepend($o);
+
+            Log::debug('product_barcode_datatable:  AFTER productbarcode=' .
+                json_encode($productbarcode));
+
+            $productbarcode->map(function ($f) use ($barcode) {
+                if (!empty($barcode[0][0])) {
+
+                    Log::debug('product_barcode_datatable map(): 2. barcode=' .
+                        json_encode($barcode));
+
+                    $product_barcode = collect();
+
+                    Log::debug('product_barcode_datatable map(): product_barcode=' .
+                        json_encode($product_barcode));
+
+                    $product_barcode['systemid'] = $f->barcode;
+
+                    $notes = $product_barcode->notes;
+                    $notes .= "Start Date: <b>";
+                    $notes .= date("dMy", strtotime($f->startdate));
+                    $notes .= "</b><br>";
+                    $notes .= "Expiry Date: <b>";
+                    $notes .= date("dMy", strtotime($f->expirydate));
+                    $notes .= "</b>";
+                    $product_barcode['notes'] = $notes;
+
+                    $barcode[] = $barcode;
+                }
+            });
+
+            Log::debug('product_barcode_datatable: 3. barcode=' .
+                json_encode($barcode));
+
+            return Datatables::of($productbarcode)->
+				addIndexColumn()->
+				addColumn('product_barcode', function ($memberList) {
+
+                Log::debug('product_barcode_datatable: memberList=' .
+                    json_encode($memberList));
+
+					/*
+					Log::debug('product_barcode_datatable: systemid='.
+						$memberList->systemid.', barcode='.
+						$memberList->barcode);
+					*/
+
+                $code = new DNS1D();
+                $code = $code->getBarcodePNG(trim($memberList->barcode), "C128");
+                $bc = $memberList->barcode;
+
+                return <<<EOD
+                        <div style="display:flex;justify-content: flex-start;">
+                            <div style="display:flex;flex-direction: column;justify-content: center;align-items: center;">
+                                <img src="data:image/png;base64,$code" style="display:block;"
+                                     alt="barcode" class="" width="200px" height="70px "/>
+                                $bc
+                            </div>
+                        </div>
+      EOD;
+            })->addColumn('action', function ($row) {
+                $transaction = DB::table('cstore_receiptproduct')->
+					where('product_id', $row->product_id)->first();
+
+                if (empty($transaction)) {
+                    $row->can_delete = true;
+                } else {
+                    $row->can_delete = false;
+                }
+
+                $prd_sysid = DB::table('product')->
+					whereId($row->product_id)->first();
+
+                if ($row->barcode == $prd_sysid->systemid) {
+                    $btn = '<a  style="text-decoration: none;  filter: grayscale(100) brightness(1.5); pointer-events: none;cursor: default;" ' .
+                        ' class="delete"> ' .
+                        '</a>';
+                    return $btn;
+                } else if ($row->can_delete == true) {
+                    $btn = '<a  href="javascript:void(0)" id="bc_' .
+						$row->barcode . '"' .
+                        ' onclick="delete_barcode(this.id)" data-barcode="' .
+						$row->barcode . '" class="delete"> ' .
+                        ' <img width="25px" src="/images/redcrab_50x50.png" alt=""> ' .
+                        '</a>';
+                    return $btn;
+                } else {
+                    $btn = '<a  style="text-decoration: none;  filter: grayscale(100) brightness(1.5); pointer-events: none;cursor: default;" ' .
+                        ' class="delete"> ' .
+                        '<img width="25px" src="/images/redcrab_50x50.png" alt=""> ' .
+                        '</a>';
+                    return $btn;
+                }
+            })->rawColumns(['action'])->escapeColumns([])->make(true);
+        } catch (Exception $e) {
+            Log::info([
+                "Error" => $e->getMessage(),
+                "File" => $e->getFile(),
+                "Line No" => $e->getLine(),
+            ]);
+            abort(404);
+        }
+    }
+
+
+    public function save_barcode(Request $request)
+    {
+        $barcodes = trim($request->barcodes);
+        $barcodes = str_replace("\n", ";", $barcodes);
+        $barcodes = str_replace(",", ";", $barcodes);
+        $parts = explode(';', $barcodes);
+
+        Log::debug('parts=' . json_encode($parts));
+
+        $company = Company::first();
+        $merchant_id = $company->id;
+        $duplicate_barcodes = "";
+
+        $prd = DB::table('prd_openitem')->
+			whereId($request->id)->first();
+
+        $merchant_product = DB::table('merchantproduct')->
+			select('id')->
+			where('merchant_id', '=', $merchant_id)->
+			where('product_id', '=', $prd->product_id)->first();
+
+        Log::debug('merchant_product=' . json_encode($merchant_product));
+
+        $is_duplicate = false;
+        foreach ($parts as $part) {
+            $part = trim($part);
+
+            Log::debug('merchant_id=' . $merchant_id);
+            Log::debug('product_id =' . $request->id);
+            Log::debug('barcode    =' . $part);
+
+            $count = DB::table('merchantproduct as mp')->join(
+                'productbarcode as pb',
+                'mp.id',
+                '=',
+                'pb.merchantproduct_id'
+            )->select('pb.barcode')->where('mp.merchant_id', '=', $merchant_id)->
+                // where('mp.product_id', '=', $request->id)->
+                where('pb.barcode', '=', $part)->whereNull('pb.deleted_at')->count();
+
+            Log::debug('count=' . json_encode($count));
+
+            if (empty($count)) {
+                DB::table('productbarcode')->insert([
+                    "merchantproduct_id" => $merchant_product->id,
+                    "product_id" => $prd->product_id,
+                    "barcode" => $part,
+                    "created_at" => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s'),
+                ]);
+            } else {
+                $is_duplicate = true;
+                $duplicate_barcodes .= $part . "<br>";
+            }
+        }
+
+        if ($is_duplicate) {
+            $msg = "Duplicated barcodes found:<br>" .
+                $duplicate_barcodes;
+
+            // $html = view('openitem.dialog', compact('msg'))->render();
+            return $msg;
+        } else {
+            return 0;
+        }
+    }
+
+
+    /**
+     * Create Barcode from user input range
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
+    public function create_barcode_from_input_range(Request $request)
+    {
+        $this->barcodeGeneratorValidator($request);
+
+        $barcode_from     = (int) $request->get('barcode_from');
+        $barcode_to     = (int) $request->get('barcode_to');
+        $product_id     = $request->get('product_id');
+        $barcode_notes     = $request->get('barcode_notes');
+        $merchant_id     = (new UserData())->company_id();
+
+        $merchant_product = DB::table('merchantproduct')->
+			select('id')->
+			where('merchant_id', '=', $merchant_id)->
+			where('product_id', '=', $product_id)->first();
+
+        if ($barcodes = $this->checkIfBarcodesExistWithRange(
+				$product_id, $merchant_product->id,
+				$barcode_from, $barcode_to)) {
+
+            $unique_barcodes = array_unique($barcodes);
+            sort($unique_barcodes);
+            if (count($unique_barcodes) > 10) {
+                return response()->json([
+                    'status'     => 'success',
+                    'message'     => 'System detected clashing barcodes already in existence: <div class="text-left"><br/>'
+                        . implode('<br/>', array_slice($unique_barcodes, 0, 10)) .
+						'<br>Another ' . (count($unique_barcodes) - 10) .
+						' barcodes existed.</div>',
+                ]);
+            } else {
+                return response()->json([
+                    'status'     => 'success',
+                    'message'     => 'System detected clashing barcodes already in existence: <div class="text-left"><br/>'
+                        . implode('<br/>', array_slice($unique_barcodes, 0, 10)) .
+						'</div>',
+                ]);
+            }
+        }
+
+        $this->createMultipleBarcodesWithRanges($barcode_from, $barcode_to, [
+            'barcode_type'             => 'C128',
+            'product_id'             => $product_id,
+            'merchantproduct_id'     => $merchant_product->id,
+            'notes'     => $barcode_notes
+        ]);
+
+        $this->update_barcode_oceania($product_id);
+        return response()->json([
+            'status'     => 'success',
+            'message'     => 'Barcode generated successfully',
+        ]);
+    }
+
+    public function generate_bar_code(Request $request)
+    {
+        try {
+            $bm_id = $request->bm_id;
+            $changed = false;
+            //bmatrixbarcode
+            $bmatrix =    DB::table('bmatrix')->
+				where('id', $bm_id)->
+				whereNull('deleted_at')->first();
+
+            if (empty($bmatrix)) {
+                throw new \Exception("Invalid barcode matrix");
+            }
+
+            $attributes = DB::table('bmatrixattrib')->
+				where('bmatrix_id', $bm_id)->
+				whereNull('deleted_at')->
+				whereNotNull('name')->get();
+
+            $bmatrixcolor = DB::table('bmatrixcolor')->
+				where('bmatrix_id', $bm_id)->
+				where([['color_id', '!=', 0]])->
+				whereNull('deleted_at')->get();
+
+            $attrib_items = DB::table('bmatrixattribitem')->whereIn(
+                'bmatrixattrib_id',
+                $attributes->pluck('id')
+            )->whereNull('deleted_at')->whereNotNull('name')->get();
+
+            $color_items = DB::table('color')->
+				whereIn('id', $bmatrixcolor->pluck('color_id'))->
+                //	whereNotIn('hex_code', ["#000","#000000"])->
+                whereNull('deleted_at')->pluck('id');
+            $array = [];
+
+            foreach ($attributes as $a) {
+                $array[] =     DB::table('bmatrixattribitem')->
+					where('bmatrixattrib_id', $a->id)->
+					whereNull('deleted_at')->pluck('id');
+            }
+            $combined_attr = $this->combos($array);
+            $z_array = [];
+
+            if (count($color_items) > 0) {
+                foreach ($color_items as $c) {
+                    if (count($combined_attr) > 0) {
+                        foreach ($combined_attr as $a) {
+                            $a['color']  = $c;
+                            $z_array[] = $a;
+                        }
+                    } else {
+                        $z_array = array(['color' => $c]);
+                    }
+                }
+            } else {
+
+                foreach ($combined_attr as $a) {
+                    $a['color'] = 0;
+                    $z_array[] = $a;
+                }
+            }
+
+
+            $is_exist = DB::table('bmatrixbarcode')
+                ->where('bmatrix_id', $bmatrix->id)
+                ->whereNull('deleted_at')->get();
+
+            if ($is_exist->count() > 0) {
+
+                DB::table('bmatrixbarcode')
+                    ->where('bmatrix_id', $bmatrix->id)
+                    ->delete();
+            }
+
+            foreach ($z_array as $barcode) {
+                $bar = [];
+                foreach ($barcode as $key => $id) {
+                    if ($key === 'color') {
+                        if ($id != 0) {
+                            $bmatrixcolor_id = DB::table('bmatrixcolor')->
+								where('color_id', $id)->first()->id;
+
+                            $bar[] = ["color_id" => $bmatrixcolor_id];
+                        } else {
+                            $bar[] = ["color_id" => 0];
+                        }
+                    } else {
+                        $bmatrixattribitem = DB::table('bmatrixattribitem')->
+							where('id', $id)->first();
+                        $bmatrixattrib = DB::table('bmatrixattrib')->
+							where('id', $bmatrixattribitem->bmatrixattrib_id)->first();
+                        $bar[] = [$bmatrixattrib->id => $bmatrixattribitem->id];
+                    }
+                }
+
+                ///		$bar[] = ["bmatrix_id" => $bmatrix->id];
+                $string = json_encode($bar);
+
+                DB::table('bmatrixbarcode')->insert([
+                    "bmatrix_id"    =>    $bmatrix->id,
+                    "pbarcode"        =>    $string,
+                    "created_at"    => date('Y-m-d H:i:s'),
+                    "updated_at"    =>    date("Y-m-d H:i:s")
+                ]);
+            }
+
+            if ($is_exist->count() > 0) {
+                $ischanged =    DB::table('bmatrixbarcode')->
+					where('bmatrix_id', $bmatrix->id)->
+					whereNotIn('pbarcode', $is_exist->
+					pluck('pbarcode')->toArray())->
+					whereNull('deleted_at')->get();
+
+                if ($ischanged->count() > 0) {
+                    $this->remove_exisiting_switchs($bmatrix->id);
+                }
+            }
+            $msg = "Definition updated successfully";
+            return view('layouts.dialog', compact('msg'))->render();
+        } catch (\Exception $e) {
+            Log::info($e);
+            abort(404);
+        }
+    }
+}

@@ -1,0 +1,5 @@
+Receiving note confirm
+--This line, and those below, will be ignored--
+
+M    app/Http/Controllers/ReceivingNoteController.php
+M    resources/views/receiving_note/cstore_receiving_note.blade.php

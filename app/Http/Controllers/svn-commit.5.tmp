@@ -1,0 +1,5 @@
+Updatee cost table on cstore sale
+--This line, and those below, will be ignored--
+
+M    LocalCabinetController.php
+M    CentralStockMgmtController.php
